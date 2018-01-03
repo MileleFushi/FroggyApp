@@ -207,6 +207,36 @@ public class FroggyApp extends JFrame implements ActionListener{
 		panel.add(panel_3);
 		panel_3.setLayout(null);
 		
+		JLabel lblNewLabel_3 = new JLabel(" ");
+		lblNewLabel_3.setIcon(new ImageIcon("img/lamp/LampState1.png"));
+		lblNewLabel_3.setBounds(-69, -87, 682, 611);
+		panel_3.add(lblNewLabel_3);
+		
+		JLabel lblNewLabel_4 = new JLabel(" ");
+		lblNewLabel_4.setIcon(new ImageIcon("img/clock/clockDay.png"));
+		lblNewLabel_4.setBounds(723, 231, 217, 141);
+		panel_3.add(lblNewLabel_4);
+		
+		JLabel lblNewLabel_5 = new JLabel(" ");
+		lblNewLabel_5.setIcon(new ImageIcon("img/navigation/pause.png"));
+		lblNewLabel_5.setBounds(685, 0, 42, 51);
+		panel_3.add(lblNewLabel_5);
+		
+		JLabel lblNewLabel_6 = new JLabel(" ");
+		lblNewLabel_6.setIcon(new ImageIcon("img/navigation/play.png"));
+		lblNewLabel_6.setBounds(762, 0, 48, 51);
+		panel_3.add(lblNewLabel_6);
+		
+		JLabel lblNewLabel_7 = new JLabel(" ");
+		lblNewLabel_7.setIcon(new ImageIcon("img/navigation/forward.png"));
+		lblNewLabel_7.setBounds(820, 0, 55, 51);
+		panel_3.add(lblNewLabel_7);
+		
+		JLabel lblNewLabel_8 = new JLabel(" ");
+		lblNewLabel_8.setIcon(new ImageIcon("img/navigation/fastForward.png"));
+		lblNewLabel_8.setBounds(885, 0, 55, 51);
+		panel_3.add(lblNewLabel_8);
+		
 		JPanel panel_2 = new JPanel();
 		panel_2.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, new Color(224, 255, 255), new Color(0, 100, 0), new Color(0, 128, 0), new Color(224, 255, 255)));
 		panel_2.setBackground(new Color(240, 255, 240));
@@ -276,17 +306,17 @@ public class FroggyApp extends JFrame implements ActionListener{
 		panel.add(lblSymulacjaTerrarium);
 		
 		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setIcon(new ImageIcon("D:\\Pulpit\\IO FroggyApp\\image\\zabieLogo.png"));
+		lblNewLabel.setIcon(new ImageIcon("img/zabieLogo.png"));
 		lblNewLabel.setBounds(10, 32, 984, 89);
 		panel.add(lblNewLabel);
 		
 		JLabel lblNewLabel_1 = new JLabel("");
-		lblNewLabel_1.setIcon(new ImageIcon("D:\\Pulpit\\IO FroggyApp\\image\\glowaZaby.png"));
+		lblNewLabel_1.setIcon(new ImageIcon("img/glowaZaby.png"));
 		lblNewLabel_1.setBounds(725, 290, 235, 134);
 		panel.add(lblNewLabel_1);
 		
 		JLabel lblNewLabel_2 = new JLabel("");
-		lblNewLabel_2.setIcon(new ImageIcon("D:\\Pulpit\\IO FroggyApp\\image\\buttonSymuluj.png"));
+		lblNewLabel_2.setIcon(new ImageIcon("img/buttonSymuluj.png"));
 		lblNewLabel_2.setBounds(371, 160, 284, 102);
 		panel.add(lblNewLabel_2);
 		
