@@ -3,8 +3,22 @@ package data;
 import java.util.ArrayList;
 
 public class DayTemperature {
-
+	
 	private static ArrayList<Category> categories;
+	
+	public static Category getCategory(String name) throws NoCategoryFoundException {
+		
+		for(Category cat : categories) {
+			if(cat.getName().equals(name))
+				return cat;
+		}
+		
+		throw new NoCategoryFoundException(name);
+	}	
+	
+	public static ArrayList<Category> getCategories() {		
+		return categories;
+	}
 	
 	public static void prepare() {
 		
@@ -30,15 +44,5 @@ public class DayTemperature {
 				return ShapeCreator.trapeze(false, arg, 30, 34);
 			}
 		});
-	}
-	
-	public static Category getCategory(String name) {
-		
-		for(Category cat : categories) {
-			if(cat.getName().equals(name))
-				return cat;
-		}
-		
-		return null;
 	}
 }

@@ -14,7 +14,6 @@ public class Category implements CatInterface {
 	
 	@Override
 	public double getValueFor(int arg) {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 	

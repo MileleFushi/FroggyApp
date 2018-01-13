@@ -1,13 +1,15 @@
 package app;
 
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 
 
 import java.awt.Font;
+import java.awt.FontFormatException;
+import java.awt.GraphicsEnvironment;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -16,17 +18,19 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
-import javax.swing.JCheckBoxMenuItem;
 import javax.swing.border.SoftBevelBorder;
 
 import javafx.scene.layout.Border;
 
 import javax.swing.border.BevelBorder;
 import java.awt.Color;
+
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
+import javax.swing.SpinnerListModel;
 
 /**
  * Program DressUpApp
@@ -37,11 +41,12 @@ import javax.swing.SwingConstants;
 
 
 public class FroggyApp extends JFrame implements ActionListener{
-
+	
 	JPanel mainPanel, dataInPanel, dataOutPanel, terraPanel;
 	JMenuBar menuBar;
 	private JTextField textField;
 	private JTextField textField_1;
+	private JLabel clockLabel;
 	
 	
 
@@ -52,13 +57,13 @@ public class FroggyApp extends JFrame implements ActionListener{
 	 */
 	public FroggyApp() {
 		
-		setTitle("FroggyApp - program kontroli ...");
+		setTitle("FroggyApp - program zarządzający warunkami w terrarium");
 		setBounds(100, 100, 1000, 800);
 		setLocationRelativeTo(null);
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		initComponents();
+		initComponents();		
 	}
 
 	
@@ -100,16 +105,37 @@ public class FroggyApp extends JFrame implements ActionListener{
 		JMenuItem mntmStart = new JMenuItem("Start");
 		mnNarzdzia.add(mntmStart);
 		
-		JMenu mnPrdko = new JMenu("Prędkość");
+		JMenu mnPrdko = new JMenu("Przyspieszenie");
 		mnNarzdzia.add(mnPrdko);
 		
-		JMenuItem mntmX = new JMenuItem("x2");
+		JMenuItem mntmX = new JMenuItem("Brak");
+		mntmX.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				ClockThread.speedUp = 1;				
+			}
+		});
 		mnPrdko.add(mntmX);
 		
-		JMenuItem mntmX_1 = new JMenuItem("x5");
+		JMenuItem mntmX_1 = new JMenuItem("Tryb minutowy");
+		mntmX_1.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				ClockThread.speedUp = 60;
+			}
+		});
 		mnPrdko.add(mntmX_1);
 		
-		JMenuItem mntmX_2 = new JMenuItem("x10");
+		JMenuItem mntmX_2 = new JMenuItem("Tryb godzinny");
+		mntmX_2.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				ClockThread.speedUp = 1000;
+			}
+		});
 		mnPrdko.add(mntmX_2);
 		
 		JMenu mnPomoc = new JMenu("Pomoc");
@@ -149,7 +175,7 @@ public class FroggyApp extends JFrame implements ActionListener{
 		panel.add(panel_1);
 		panel_1.setLayout(null);
 		
-		JLabel lblCzasSymulacji = new JLabel("Czas symulacji:");
+		JLabel lblCzasSymulacji = new JLabel("Początek symulacji:");
 		lblCzasSymulacji.setBounds(10, 11, 145, 29);
 		lblCzasSymulacji.setForeground(new Color(3, 72, 5));
 		lblCzasSymulacji.setFont(new Font("Franklin Gothic Book", Font.PLAIN, 17));
@@ -168,6 +194,8 @@ public class FroggyApp extends JFrame implements ActionListener{
 		panel_1.add(lblWilgotnoWTerrarium);
 		
 		JSpinner spinner = new JSpinner();
+		spinner.setModel(new SpinnerListModel(HoursList.get()));
+		spinner.setEditor(new JSpinner.DefaultEditor(spinner));
 		spinner.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		spinner.setBounds(241, 13, 75, 26);
 		panel_1.add(spinner);
@@ -212,30 +240,83 @@ public class FroggyApp extends JFrame implements ActionListener{
 		lblNewLabel_3.setBounds(-69, -87, 682, 611);
 		panel_3.add(lblNewLabel_3);
 		
+		JButton pauseButton = new JButton();
+		pauseButton.setIcon(new ImageIcon("img/navigation/pause.png"));
+		pauseButton.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
+		pauseButton.setContentAreaFilled(false);
+		pauseButton.setBounds(685, 0, 42, 51);
+		pauseButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new Thread(new ClockThread().stopIt());		
+			}});
+		
+		panel_3.add(pauseButton);
+		
+		JButton playButton = new JButton();
+		playButton.setIcon(new ImageIcon("img/navigation/play.png"));
+		playButton.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
+		playButton.setContentAreaFilled(false);
+		playButton.setBounds(762, 0, 48, 51);
+		playButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				
+				if(!ClockThread.running)
+					(new Thread(new ClockThread().allow().setClockLabel(clockLabel))).start();				
+			}
+		});
+		
+		panel_3.add(playButton);
+		
+		JButton forwardButton = new JButton();
+		forwardButton.setIcon(new ImageIcon("img/navigation/forward.png"));
+		forwardButton.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
+		forwardButton.setContentAreaFilled(false);
+		forwardButton.setBounds(820, 0, 55, 51);
+		
+		forwardButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				ClockThread.speedUp = 60;				
+			}
+		});
+		
+		panel_3.add(forwardButton);
+		
+		JButton fastForwardButton = new JButton();
+		fastForwardButton.setIcon(new ImageIcon("img/navigation/fastForward.png"));
+		fastForwardButton.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
+		fastForwardButton.setContentAreaFilled(false);
+		fastForwardButton.setBounds(885, 0, 55, 51);
+		
+		fastForwardButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				ClockThread.speedUp = 1000;				
+			}
+		});
+		
+		panel_3.add(fastForwardButton);
+		
+		try {
+		     GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		     ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("lib/digital-7.ttf")));
+		} catch (IOException | FontFormatException e) {}
+		
+		clockLabel = new JLabel(Time.getTime());
+		clockLabel.setFont(new Font("digital-7", Font.BOLD, 34));
+		clockLabel.setBounds(765, 270, 100, 60);
+		panel_3.add(clockLabel);
+		
 		JLabel lblNewLabel_4 = new JLabel(" ");
 		lblNewLabel_4.setIcon(new ImageIcon("img/clock/clockDay.png"));
 		lblNewLabel_4.setBounds(723, 231, 217, 141);
 		panel_3.add(lblNewLabel_4);
-		
-		JLabel lblNewLabel_5 = new JLabel(" ");
-		lblNewLabel_5.setIcon(new ImageIcon("img/navigation/pause.png"));
-		lblNewLabel_5.setBounds(685, 0, 42, 51);
-		panel_3.add(lblNewLabel_5);
-		
-		JLabel lblNewLabel_6 = new JLabel(" ");
-		lblNewLabel_6.setIcon(new ImageIcon("img/navigation/play.png"));
-		lblNewLabel_6.setBounds(762, 0, 48, 51);
-		panel_3.add(lblNewLabel_6);
-		
-		JLabel lblNewLabel_7 = new JLabel(" ");
-		lblNewLabel_7.setIcon(new ImageIcon("img/navigation/forward.png"));
-		lblNewLabel_7.setBounds(820, 0, 55, 51);
-		panel_3.add(lblNewLabel_7);
-		
-		JLabel lblNewLabel_8 = new JLabel(" ");
-		lblNewLabel_8.setIcon(new ImageIcon("img/navigation/fastForward.png"));
-		lblNewLabel_8.setBounds(885, 0, 55, 51);
-		panel_3.add(lblNewLabel_8);
 		
 		JPanel panel_2 = new JPanel();
 		panel_2.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, new Color(224, 255, 255), new Color(0, 100, 0), new Color(0, 128, 0), new Color(224, 255, 255)));
@@ -315,10 +396,26 @@ public class FroggyApp extends JFrame implements ActionListener{
 		lblNewLabel_1.setBounds(725, 290, 235, 134);
 		panel.add(lblNewLabel_1);
 		
-		JLabel lblNewLabel_2 = new JLabel("");
-		lblNewLabel_2.setIcon(new ImageIcon("img/buttonSymuluj.png"));
-		lblNewLabel_2.setBounds(371, 160, 284, 102);
-		panel.add(lblNewLabel_2);
+		JButton simulateButton = new JButton();
+		simulateButton.setIcon(new ImageIcon("img/buttonSymuluj.png"));
+		simulateButton.setBounds(371, 160, 284, 102);
+		simulateButton.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
+		simulateButton.setContentAreaFilled(false);
+		
+		simulateButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Time.setTimeFromString((String) spinner.getValue());
+				
+				ClockThread.speedUp = 1;
+				
+				if(!ClockThread.running)
+					(new Thread(new ClockThread().allow().setClockLabel(clockLabel))).start();
+			}
+		});
+		
+		panel.add(simulateButton);
 		
 		return panel;
 	}
@@ -345,7 +442,7 @@ public class FroggyApp extends JFrame implements ActionListener{
 /* -----------------------------------------------------------------------------------*/	
 	
 	/**
-	 * Metoda inicializująca komponenty aplikacji
+	 * Metoda inicjalizująca komponenty aplikacji
 	 */
 	private void initComponents() {
 	
