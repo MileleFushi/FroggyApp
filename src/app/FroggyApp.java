@@ -31,6 +31,7 @@ import javax.swing.JButton;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerListModel;
+import javax.swing.SwingConstants;
 
 /**
  * Program DressUpApp
@@ -42,11 +43,11 @@ import javax.swing.SpinnerListModel;
 
 public class FroggyApp extends JFrame implements ActionListener{
 	
-	JPanel mainPanel, dataInPanel, dataOutPanel, terraPanel;
-	JMenuBar menuBar;
-	private JTextField textField;
-	private JTextField textField_1;
-	private JLabel clockLabel;
+	private JPanel mainPanel, dataInPanel, dataOutPanel, terraPanel;
+	
+	private JTextField textFieldSimulatingTemperatureOut;
+	private JTextField textFieldSimulatingHumidityOut;
+	private JLabel labelClock;
 	
 	
 
@@ -63,22 +64,269 @@ public class FroggyApp extends JFrame implements ActionListener{
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		initComponents();		
+		initComponents();
+		loadFont("lib/digital-7.ttf");
 	}
 
 	
 /* -----------------------------------------------------------------------------------*/
 	
 	/**
-	 * Metoda tworząca obiekt typu JMenuBar
-	 * @param x zmienna określająca położenie komponentu w osi X
-	 * @param y zmienna określająca położenie komponentu w osi y
-	 * @param width zmienna określająca szerokość komponentu
-	 * @param height zmienna określająca wysokość komponentu
-	 * @return zwraca obiekt typu JMenuBar
+	 * Metoda inicjalizująca komponenty aplikacji
 	 */
-	public JMenuBar createMenuBar(int x, int y, int width, int height){
+	
+	private void initComponents(){
 		
+		mainPanel = (JPanel)getContentPane();
+		mainPanel.setBounds(0, 0, 1000, 800);
+		mainPanel.setBackground( new Color(143, 188, 143) );
+		mainPanel.setBorder(null);
+		
+	// DATA IN PANEL
+		
+		dataInPanel = new JPanel();
+		dataInPanel.setBackground(new Color(240, 255, 240));
+		dataInPanel.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, new Color(224, 255, 255), new Color(0, 100, 0), new Color(0, 128, 0), new Color(224, 255, 255)));
+		dataInPanel.setBounds(22, 154, 362, 120);
+		mainPanel.add(dataInPanel);
+		dataInPanel.setLayout(null);
+		
+		JLabel labelSimulatingTime = new JLabel("Początek symulacji:");
+		labelSimulatingTime.setBounds(10, 11, 145, 29);
+		labelSimulatingTime.setForeground(new Color(3, 72, 5));
+		labelSimulatingTime.setFont(new Font("Franklin Gothic Book", Font.PLAIN, 17));
+		dataInPanel.add(labelSimulatingTime);
+		
+		JLabel labelTerraTemperature = new JLabel("Temperatura w terrarium:");
+		labelTerraTemperature.setForeground(new Color(3, 72, 5));
+		labelTerraTemperature.setFont(new Font("Franklin Gothic Book", Font.PLAIN, 17));
+		labelTerraTemperature.setBounds(10, 44, 194, 29);
+		dataInPanel.add(labelTerraTemperature);
+		
+		JLabel lalbelTerraHumidity = new JLabel("Wilgotność w terrarium:");
+		lalbelTerraHumidity.setForeground(new Color(3, 72, 5));
+		lalbelTerraHumidity.setFont(new Font("Franklin Gothic Book", Font.PLAIN, 17));
+		lalbelTerraHumidity.setBounds(10, 80, 194, 29);
+		dataInPanel.add(lalbelTerraHumidity);
+		
+		JSpinner spinnerSimulatingTime = new JSpinner();
+		spinnerSimulatingTime.setModel(new SpinnerListModel(HoursList.get()));
+		spinnerSimulatingTime.setEditor(new JSpinner.DefaultEditor(spinnerSimulatingTime));
+		spinnerSimulatingTime.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		spinnerSimulatingTime.setBounds(241, 13, 75, 26);
+		dataInPanel.add(spinnerSimulatingTime);
+		
+		JSpinner spinnerTerraTemperature = new JSpinner();
+		spinnerTerraTemperature.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		spinnerTerraTemperature.setBounds(241, 46, 75, 26);
+		dataInPanel.add(spinnerTerraTemperature);
+		
+		JSpinner spinnerTerraHumidity = new JSpinner();
+		spinnerTerraHumidity.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		spinnerTerraHumidity.setBounds(241, 82, 75, 26);
+		dataInPanel.add(spinnerTerraHumidity);
+		
+		JLabel lblh = new JLabel("[ h ]");
+		lblh.setForeground(new Color(3, 72, 5));
+		lblh.setFont(new Font("Franklin Gothic Book", Font.PLAIN, 21));
+		lblh.setBounds(320, 11, 42, 29);
+		dataInPanel.add(lblh);
+		
+		JLabel lblc = new JLabel("[°C]");
+		lblc.setForeground(new Color(3, 72, 5));
+		lblc.setFont(new Font("Franklin Gothic Book", Font.PLAIN, 19));
+		lblc.setBounds(320, 43, 42, 29);
+		dataInPanel.add(lblc);
+		
+		JLabel lblprocent = new JLabel("[ % ]");
+		lblprocent.setForeground(new Color(3, 72, 5));
+		lblprocent.setFont(new Font("Franklin Gothic Book", Font.PLAIN, 21));
+		lblprocent.setBounds(320, 80, 42, 29);
+		dataInPanel.add(lblprocent);
+		
+		
+		terraPanel = new JPanel();
+		terraPanel.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, new Color(224, 255, 255), new Color(0, 100, 0), new Color(0, 128, 0), new Color(224, 255, 255)));
+		terraPanel.setBackground(new Color(240, 255, 240));
+		terraPanel.setBounds(22, 354, 950, 372);
+		mainPanel.add(terraPanel);
+		terraPanel.setLayout(null);
+		
+	// TERRA PANEL
+		
+		JLabel labelLampImage = new JLabel(" ");
+		labelLampImage.setIcon(new ImageIcon("img/lamp/LampState1.png"));
+		labelLampImage.setBounds(-69, -87, 682, 611);
+		terraPanel.add(labelLampImage);
+		
+		JButton buttonPause = new JButton();
+		buttonPause.setIcon(new ImageIcon("img/navigation/pause.png"));
+		buttonPause.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
+		buttonPause.setContentAreaFilled(false);
+		buttonPause.setBounds(685, 0, 42, 51);
+		buttonPause.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new Thread(new ClockThread().stopIt());		
+			}});
+		terraPanel.add(buttonPause);
+		
+		JButton buttonPlay = new JButton();
+		buttonPlay.setIcon(new ImageIcon("img/navigation/play.png"));
+		buttonPlay.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
+		buttonPlay.setContentAreaFilled(false);
+		buttonPlay.setBounds(762, 0, 48, 51);
+		buttonPlay.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				
+				if(!ClockThread.running)
+					(new Thread(new ClockThread().allow().setClockLabel(labelClock))).start();				
+			}
+		});
+		terraPanel.add(buttonPlay);
+		
+		JButton buttonForward = new JButton();
+		buttonForward.setIcon(new ImageIcon("img/navigation/forward.png"));
+		buttonForward.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
+		buttonForward.setContentAreaFilled(false);
+		buttonForward.setBounds(820, 0, 55, 51);
+		
+		buttonForward.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				ClockThread.speedUp = 60;				
+			}
+		});
+		terraPanel.add(buttonForward);
+		
+		JButton buttonFastForward = new JButton();
+		buttonFastForward.setIcon(new ImageIcon("img/navigation/fastForward.png"));
+		buttonFastForward.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
+		buttonFastForward.setContentAreaFilled(false);
+		buttonFastForward.setBounds(885, 0, 55, 51);
+		
+		buttonFastForward.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				ClockThread.speedUp = 1000;				
+			}
+		});
+		terraPanel.add(buttonFastForward);
+		
+		labelClock = new JLabel(Time.getTime());
+		labelClock.setFont(new Font("digital-7", Font.BOLD, 34));
+		labelClock.setBounds(765, 270, 100, 60);
+		terraPanel.add(labelClock);
+		
+		JLabel labelClockImage = new JLabel(" ");
+		labelClockImage.setIcon(new ImageIcon("img/clock/clockDay.png"));
+		labelClockImage.setBounds(723, 231, 217, 141);
+		terraPanel.add(labelClockImage);
+		
+	// DATA OUT PANEL
+		
+		dataOutPanel = new JPanel();
+		dataOutPanel.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, new Color(224, 255, 255), new Color(0, 100, 0), new Color(0, 128, 0), new Color(224, 255, 255)));
+		dataOutPanel.setBackground(new Color(240, 255, 240));
+		dataOutPanel.setBounds(623, 154, 349, 120);
+		mainPanel.add(dataOutPanel);
+		dataOutPanel.setLayout(null);
+		
+		JLabel labelSimulatingTemperatureOut = new JLabel("Matę grzewczą ustaw na:");
+		labelSimulatingTemperatureOut.setForeground(new Color(3, 72, 5));
+		labelSimulatingTemperatureOut.setFont(new Font("Franklin Gothic Book", Font.PLAIN, 17));
+		labelSimulatingTemperatureOut.setBounds(10, 11, 198, 29);
+		dataOutPanel.add(labelSimulatingTemperatureOut);
+		
+		JLabel labelSimulatingHumidityOut = new JLabel("Generator pary ustaw na:");
+		labelSimulatingHumidityOut.setForeground(new Color(3, 72, 5));
+		labelSimulatingHumidityOut.setFont(new Font("Franklin Gothic Book", Font.PLAIN, 17));
+		labelSimulatingHumidityOut.setBounds(10, 45, 198, 29);
+		dataOutPanel.add(labelSimulatingHumidityOut);
+		
+		textFieldSimulatingTemperatureOut = new JTextField();
+		textFieldSimulatingTemperatureOut.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		textFieldSimulatingTemperatureOut.setBounds(206, 13, 75, 26);
+		textFieldSimulatingTemperatureOut.setEditable(false);
+		dataOutPanel.add(textFieldSimulatingTemperatureOut);
+		textFieldSimulatingTemperatureOut.setColumns(10);
+		
+		textFieldSimulatingHumidityOut = new JTextField();
+		textFieldSimulatingHumidityOut.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		textFieldSimulatingHumidityOut.setColumns(10);
+		textFieldSimulatingHumidityOut.setBounds(206, 47, 75, 26);
+		textFieldSimulatingHumidityOut.setEditable(false);
+		dataOutPanel.add(textFieldSimulatingHumidityOut);
+		
+		JLabel lblc_1 = new JLabel("[°C]");
+		lblc_1.setForeground(new Color(3, 72, 5));
+		lblc_1.setFont(new Font("Franklin Gothic Book", Font.PLAIN, 19));
+		lblc_1.setBounds(286, 11, 53, 29);
+		dataOutPanel.add(lblc_1);
+		
+		JLabel labelprocent_1 = new JLabel("[ % ]");
+		labelprocent_1.setForeground(new Color(3, 72, 5));
+		labelprocent_1.setFont(new Font("Franklin Gothic Book", Font.PLAIN, 21));
+		labelprocent_1.setBounds(286, 45, 53, 29);
+		dataOutPanel.add(labelprocent_1);
+		
+	//DATA MAIN PANEL
+		
+		JLabel labelDataIn = new JLabel("Dane wejściowe:");
+		labelDataIn.setForeground(new Color(3, 72, 5));
+		labelDataIn.setFont(new Font("Sitka Display", Font.PLAIN, 22));
+		labelDataIn.setBounds(52, 122, 165, 21);
+		mainPanel.add(labelDataIn);
+		
+		JLabel labelDataOut = new JLabel("Dane wyjściowe:");
+		labelDataOut.setForeground(new Color(3, 72, 5));
+		labelDataOut.setFont(new Font("Sitka Display", Font.PLAIN, 22));
+		labelDataOut.setBounds(655, 122, 165, 21);
+		mainPanel.add(labelDataOut);
+		
+		JLabel labelSimulatingTheTerra = new JLabel("Symulacja terrarium:");
+		labelSimulatingTheTerra.setForeground(new Color(3, 72, 5));
+		labelSimulatingTheTerra.setFont(new Font("Sitka Display", Font.PLAIN, 24));
+		labelSimulatingTheTerra.setBounds(52, 321, 245, 28);
+		mainPanel.add(labelSimulatingTheTerra);
+		
+		JLabel labelFroggyLogoImage = new JLabel("");
+		labelFroggyLogoImage.setIcon(new ImageIcon("img/zabieLogo.png"));
+		labelFroggyLogoImage.setBounds(10, 32, 984, 89);
+		mainPanel.add(labelFroggyLogoImage);
+		
+		JLabel labelFroggyHeadImage = new JLabel("");
+		labelFroggyHeadImage.setIcon(new ImageIcon("img/glowaZaby.png"));
+		labelFroggyHeadImage.setBounds(725, 290, 235, 134);
+		mainPanel.add(labelFroggyHeadImage);
+		
+		JButton buttonSimulate = new JButton();
+		
+		buttonSimulate.setIcon(new ImageIcon("img/buttonSymuluj.png"));
+		buttonSimulate.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
+		buttonSimulate.setContentAreaFilled(false);
+		buttonSimulate.setBounds(371, 160, 284, 102);
+		
+		buttonSimulate.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Time.setTimeFromString((String) spinnerSimulatingTime.getValue());
+				
+				ClockThread.speedUp = 1;
+				
+				if(!ClockThread.running)
+					(new Thread(new ClockThread().allow().setClockLabel(labelClock))).start();
+			}
+		});
+		mainPanel.add(buttonSimulate);
+		
+	//DATA IN MENUBAR
 		
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.setBackground(new Color(240, 255, 240));
@@ -146,317 +394,24 @@ public class FroggyApp extends JFrame implements ActionListener{
 		
 		JMenuItem mntmOProgramie = new JMenuItem("O programie");
 		mnPomoc.add(mntmOProgramie);
-
 		
-		return menuBar;
-	}
-	
-	/**
-	 * Metoda tworząca obiekt typu JPanel
-	 * @param x zmienna określająca położenie komponentu w osi X
-	 * @param y zmienna określająca położenie komponentu w osi y
-	 * @param width zmienna określająca szerokość komponentu
-	 * @param height zmienna określająca wysokość komponentu
-	 * @param backgroundColor zmienna określająca kolor tła komponentu
-	 * @param border zmienna określająca typ granicy komponentu
-	 * @return zwraca obiekt typu JPanel
-	 */
-	public JPanel createPanel(int x, int y, int width, int height, Color backgroundColor, Border border){
-		
-		JPanel panel = new JPanel();
-		panel.setBackground(new Color(143, 188, 143));
-		panel.setLayout(null);
-		panel.setBounds(x, y, width, height);
-		
-		JPanel panel_1 = new JPanel();
-		panel_1.setBackground(new Color(240, 255, 240));
-		panel_1.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, new Color(224, 255, 255), new Color(0, 100, 0), new Color(0, 128, 0), new Color(224, 255, 255)));
-		panel_1.setBounds(22, 154, 362, 120);
-		panel.add(panel_1);
-		panel_1.setLayout(null);
-		
-		JLabel lblCzasSymulacji = new JLabel("Początek symulacji:");
-		lblCzasSymulacji.setBounds(10, 11, 145, 29);
-		lblCzasSymulacji.setForeground(new Color(3, 72, 5));
-		lblCzasSymulacji.setFont(new Font("Franklin Gothic Book", Font.PLAIN, 17));
-		panel_1.add(lblCzasSymulacji);
-		
-		JLabel lblTemperaturaWTerrarium = new JLabel("Temperatura w terrarium:");
-		lblTemperaturaWTerrarium.setForeground(new Color(3, 72, 5));
-		lblTemperaturaWTerrarium.setFont(new Font("Franklin Gothic Book", Font.PLAIN, 17));
-		lblTemperaturaWTerrarium.setBounds(10, 44, 194, 29);
-		panel_1.add(lblTemperaturaWTerrarium);
-		
-		JLabel lblWilgotnoWTerrarium = new JLabel("Wilgotność w terrarium:");
-		lblWilgotnoWTerrarium.setForeground(new Color(3, 72, 5));
-		lblWilgotnoWTerrarium.setFont(new Font("Franklin Gothic Book", Font.PLAIN, 17));
-		lblWilgotnoWTerrarium.setBounds(10, 80, 194, 29);
-		panel_1.add(lblWilgotnoWTerrarium);
-		
-		JSpinner spinner = new JSpinner();
-		spinner.setModel(new SpinnerListModel(HoursList.get()));
-		spinner.setEditor(new JSpinner.DefaultEditor(spinner));
-		spinner.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		spinner.setBounds(241, 13, 75, 26);
-		panel_1.add(spinner);
-		
-		JSpinner spinner_1 = new JSpinner();
-		spinner_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		spinner_1.setBounds(241, 46, 75, 26);
-		panel_1.add(spinner_1);
-		
-		JSpinner spinner_2 = new JSpinner();
-		spinner_2.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		spinner_2.setBounds(241, 82, 75, 26);
-		panel_1.add(spinner_2);
-		
-		JLabel lblh = new JLabel("[ h ]");
-		lblh.setForeground(new Color(3, 72, 5));
-		lblh.setFont(new Font("Franklin Gothic Book", Font.PLAIN, 21));
-		lblh.setBounds(320, 11, 42, 29);
-		panel_1.add(lblh);
-		
-		JLabel lblc = new JLabel("[°C]");
-		lblc.setForeground(new Color(3, 72, 5));
-		lblc.setFont(new Font("Franklin Gothic Book", Font.PLAIN, 19));
-		lblc.setBounds(320, 43, 42, 29);
-		panel_1.add(lblc);
-		
-		JLabel label_1 = new JLabel("[ % ]");
-		label_1.setForeground(new Color(3, 72, 5));
-		label_1.setFont(new Font("Franklin Gothic Book", Font.PLAIN, 21));
-		label_1.setBounds(320, 80, 42, 29);
-		panel_1.add(label_1);
-		
-		JPanel panel_3 = new JPanel();
-		panel_3.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, new Color(224, 255, 255), new Color(0, 100, 0), new Color(0, 128, 0), new Color(224, 255, 255)));
-		panel_3.setBackground(new Color(240, 255, 240));
-		panel_3.setBounds(22, 354, 950, 372);
-		panel.add(panel_3);
-		panel_3.setLayout(null);
-		
-		JLabel lblNewLabel_3 = new JLabel(" ");
-		lblNewLabel_3.setIcon(new ImageIcon("img/lamp/LampState1.png"));
-		lblNewLabel_3.setBounds(-69, -87, 682, 611);
-		panel_3.add(lblNewLabel_3);
-		
-		JButton pauseButton = new JButton();
-		pauseButton.setIcon(new ImageIcon("img/navigation/pause.png"));
-		pauseButton.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
-		pauseButton.setContentAreaFilled(false);
-		pauseButton.setBounds(685, 0, 42, 51);
-		pauseButton.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				new Thread(new ClockThread().stopIt());		
-			}});
-		
-		panel_3.add(pauseButton);
-		
-		JButton playButton = new JButton();
-		playButton.setIcon(new ImageIcon("img/navigation/play.png"));
-		playButton.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
-		playButton.setContentAreaFilled(false);
-		playButton.setBounds(762, 0, 48, 51);
-		playButton.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				
-				if(!ClockThread.running)
-					(new Thread(new ClockThread().allow().setClockLabel(clockLabel))).start();				
-			}
-		});
-		
-		panel_3.add(playButton);
-		
-		JButton forwardButton = new JButton();
-		forwardButton.setIcon(new ImageIcon("img/navigation/forward.png"));
-		forwardButton.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
-		forwardButton.setContentAreaFilled(false);
-		forwardButton.setBounds(820, 0, 55, 51);
-		
-		forwardButton.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				ClockThread.speedUp = 60;				
-			}
-		});
-		
-		panel_3.add(forwardButton);
-		
-		JButton fastForwardButton = new JButton();
-		fastForwardButton.setIcon(new ImageIcon("img/navigation/fastForward.png"));
-		fastForwardButton.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
-		fastForwardButton.setContentAreaFilled(false);
-		fastForwardButton.setBounds(885, 0, 55, 51);
-		
-		fastForwardButton.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				ClockThread.speedUp = 1000;				
-			}
-		});
-		
-		panel_3.add(fastForwardButton);
-		
-		try {
-		     GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-		     ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("lib/digital-7.ttf")));
-		} catch (IOException | FontFormatException e) {}
-		
-		clockLabel = new JLabel(Time.getTime());
-		clockLabel.setFont(new Font("digital-7", Font.BOLD, 34));
-		clockLabel.setBounds(765, 270, 100, 60);
-		panel_3.add(clockLabel);
-		
-		JLabel lblNewLabel_4 = new JLabel(" ");
-		lblNewLabel_4.setIcon(new ImageIcon("img/clock/clockDay.png"));
-		lblNewLabel_4.setBounds(723, 231, 217, 141);
-		panel_3.add(lblNewLabel_4);
-		
-		JPanel panel_2 = new JPanel();
-		panel_2.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, new Color(224, 255, 255), new Color(0, 100, 0), new Color(0, 128, 0), new Color(224, 255, 255)));
-		panel_2.setBackground(new Color(240, 255, 240));
-		panel_2.setBounds(623, 154, 349, 120);
-		panel.add(panel_2);
-		panel_2.setLayout(null);
-		
-		JLabel lblOgrzewanieUstawioneNa = new JLabel("Matę grzewczą ustaw na:");
-		lblOgrzewanieUstawioneNa.setForeground(new Color(3, 72, 5));
-		lblOgrzewanieUstawioneNa.setFont(new Font("Franklin Gothic Book", Font.PLAIN, 17));
-		lblOgrzewanieUstawioneNa.setBounds(10, 11, 198, 29);
-		panel_2.add(lblOgrzewanieUstawioneNa);
-		
-		JLabel lblPa = new JLabel("Generator pary ustaw na:");
-		lblPa.setForeground(new Color(3, 72, 5));
-		lblPa.setFont(new Font("Franklin Gothic Book", Font.PLAIN, 17));
-		lblPa.setBounds(10, 45, 198, 29);
-		panel_2.add(lblPa);
-		
-		textField = new JTextField();
-		textField.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		textField.setBounds(206, 13, 75, 26);
-		textField.setEditable(false);
-		panel_2.add(textField);
-		textField.setColumns(10);
-		
-		textField_1 = new JTextField();
-		textField_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		textField_1.setColumns(10);
-		textField_1.setBounds(206, 47, 75, 26);
-		textField_1.setEditable(false);
-		panel_2.add(textField_1);
-		
-		JLabel lblc_1 = new JLabel("[°C]");
-		lblc_1.setForeground(new Color(3, 72, 5));
-		lblc_1.setFont(new Font("Franklin Gothic Book", Font.PLAIN, 19));
-		lblc_1.setBounds(286, 11, 53, 29);
-		panel_2.add(lblc_1);
-		
-		JLabel label_2 = new JLabel("[ % ]");
-		label_2.setForeground(new Color(3, 72, 5));
-		label_2.setFont(new Font("Franklin Gothic Book", Font.PLAIN, 21));
-		label_2.setBounds(286, 45, 53, 29);
-		panel_2.add(label_2);
-		
-		JPanel panel_4 = new JPanel();
-		panel_4.setBackground(new Color(240, 255, 240));
-		panel_4.setBounds(0, 750, 994, 21);
-		panel.add(panel_4);
-		
-		JLabel lblDaneWejciowe = new JLabel("Dane wejściowe:");
-		lblDaneWejciowe.setForeground(new Color(3, 72, 5));
-		lblDaneWejciowe.setFont(new Font("Sitka Display", Font.PLAIN, 22));
-		lblDaneWejciowe.setBounds(52, 122, 165, 21);
-		panel.add(lblDaneWejciowe);
-		
-		JLabel lblDaneWyjciowe = new JLabel("Dane wyjściowe:");
-		lblDaneWyjciowe.setForeground(new Color(3, 72, 5));
-		lblDaneWyjciowe.setFont(new Font("Sitka Display", Font.PLAIN, 22));
-		lblDaneWyjciowe.setBounds(655, 122, 165, 21);
-		panel.add(lblDaneWyjciowe);
-		
-		JLabel lblSymulacjaTerrarium = new JLabel("Symulacja terrarium:");
-		lblSymulacjaTerrarium.setForeground(new Color(3, 72, 5));
-		lblSymulacjaTerrarium.setFont(new Font("Sitka Display", Font.PLAIN, 24));
-		lblSymulacjaTerrarium.setBounds(52, 321, 245, 28);
-		panel.add(lblSymulacjaTerrarium);
-		
-		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setIcon(new ImageIcon("img/zabieLogo.png"));
-		lblNewLabel.setBounds(10, 32, 984, 89);
-		panel.add(lblNewLabel);
-		
-		JLabel lblNewLabel_1 = new JLabel("");
-		lblNewLabel_1.setIcon(new ImageIcon("img/glowaZaby.png"));
-		lblNewLabel_1.setBounds(725, 290, 235, 134);
-		panel.add(lblNewLabel_1);
-		
-		JButton simulateButton = new JButton();
-		simulateButton.setIcon(new ImageIcon("img/buttonSymuluj.png"));
-		simulateButton.setBounds(371, 160, 284, 102);
-		simulateButton.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
-		simulateButton.setContentAreaFilled(false);
-		
-		simulateButton.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				Time.setTimeFromString((String) spinner.getValue());
-				
-				ClockThread.speedUp = 1;
-				
-				if(!ClockThread.running)
-					(new Thread(new ClockThread().allow().setClockLabel(clockLabel))).start();
-			}
-		});
-		
-		panel.add(simulateButton);
-		
-		return panel;
-	}
-	
-	/**
-	 * Metoda tworząca obiekt typu JLabel
-	 * @param name zmienna określająca tekst wyświetlany w polu
-	 * @param font zmienna określająca rodzaj czcionki
-	 * @param x zmienna określająca położenie komponentu w osi X
-	 * @param y zmienna określająca położenie komponentu w osi y
-	 * @param width zmienna określająca szerokość komponentu
-	 * @param height zmienna określająca wysokość komponentu
-	 * @return zwraca obiekt typu JLabel
-	 */
-	public JLabel createLabel(String name, Font font, int x, int y, int width, int height){
-		
-		JLabel label = new JLabel(name);
-		label.setFont(font);
-		label.setBounds(x, y, width, height);
-		
-		return label;
+		this.setJMenuBar(menuBar);
 	}
 	
 /* -----------------------------------------------------------------------------------*/	
 	
 	/**
-	 * Metoda inicjalizująca komponenty aplikacji
+	 * Metoda służąca do ładowania czcionek
+	 * @param pathToFont zmienna typu String przechowująca ścieżkę do pliku czcionki
 	 */
-	private void initComponents() {
 	
-	JPanel Panel = (JPanel)getContentPane();
-	
-	mainPanel = createPanel(0, 0, 1000, 800, new Color(143, 188, 143), null);
-	
-	menuBar = createMenuBar(0, 0, 994, 21);
-	
-	
-	Panel.add(mainPanel);
-	mainPanel.add(menuBar);
+	private void loadFont(String pathToFont){
+		try {
+		     GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		     ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File(pathToFont)));
+		} catch (IOException | FontFormatException e) {}
 	}
-
+	
 /* -----------------------------------------------------------------------------------*/	
 	
 	/**
@@ -483,7 +438,6 @@ public class FroggyApp extends JFrame implements ActionListener{
 	public static void main(String[] args){
 		try{
 			
-			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 	        UIManager.put("TextField.inactiveBackground",Color.white);
 			FroggyApp window = new FroggyApp();
 			window.setVisible(true);
