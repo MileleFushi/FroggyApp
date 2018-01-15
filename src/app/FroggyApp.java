@@ -395,6 +395,7 @@ public class FroggyApp extends JFrame implements ActionListener{
 		JMenuItem mntmOProgramie = new JMenuItem("O programie");
 		mnPomoc.add(mntmOProgramie);
 		
+		mainPanel.add(menuBar);
 		this.setJMenuBar(menuBar);
 	}
 	
