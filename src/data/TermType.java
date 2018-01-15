@@ -1,0 +1,12 @@
+package data;
+
+public enum TermType {
+	
+	DAY_TEMPERATURE, 
+	NIGHT_TEMPERATURE, 
+	DAY_HUMIDITY, 
+	NIGHT_HUMIDITY, 
+	HEATER_POWER, 
+	FOGGER_POWER;
+	
+}

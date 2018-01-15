@@ -2,14 +2,15 @@ package app;
 
 import javax.swing.JFrame;
 
-
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Scanner;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -20,7 +21,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
 import javax.swing.border.SoftBevelBorder;
 
-import javafx.scene.layout.Border;
+import data.Data;
+import data.NoCategoryFoundException;
 
 import javax.swing.border.BevelBorder;
 import java.awt.Color;
@@ -31,7 +33,6 @@ import javax.swing.JButton;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerListModel;
-import javax.swing.SwingConstants;
 
 /**
  * Program DressUpApp
@@ -47,7 +48,6 @@ public class FroggyApp extends JFrame implements ActionListener{
 	
 	private JTextField textFieldSimulatingTemperatureOut;
 	private JTextField textFieldSimulatingHumidityOut;
-	private JLabel labelClock;
 	
 	
 
@@ -64,8 +64,15 @@ public class FroggyApp extends JFrame implements ActionListener{
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
+		try {
+			Data.init();
+		} catch (NoCategoryFoundException e) {
+			e.printStackTrace();
+		}
+		
 		initComponents();
 		loadFont("lib/digital-7.ttf");
+		loadConfig();
 	}
 
 	
@@ -168,7 +175,7 @@ public class FroggyApp extends JFrame implements ActionListener{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new Thread(new ClockThread().stopIt());		
+				ClockThread.toStop = true;		
 			}});
 		terraPanel.add(buttonPause);
 		
@@ -182,8 +189,10 @@ public class FroggyApp extends JFrame implements ActionListener{
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				
-				if(!ClockThread.running)
-					(new Thread(new ClockThread().allow().setClockLabel(labelClock))).start();				
+				if(!ClockThread.running) {
+					ClockThread.toStop = false;
+					(new Thread(new ClockThread())).start();
+				}
 			}
 		});
 		terraPanel.add(buttonPlay);
@@ -218,7 +227,7 @@ public class FroggyApp extends JFrame implements ActionListener{
 		});
 		terraPanel.add(buttonFastForward);
 		
-		labelClock = new JLabel(Time.getTime());
+		JLabel labelClock = new JLabel(Time.getTime());
 		labelClock.setFont(new Font("digital-7", Font.BOLD, 34));
 		labelClock.setBounds(765, 270, 100, 60);
 		terraPanel.add(labelClock);
@@ -320,8 +329,10 @@ public class FroggyApp extends JFrame implements ActionListener{
 				
 				ClockThread.speedUp = 1;
 				
-				if(!ClockThread.running)
-					(new Thread(new ClockThread().allow().setClockLabel(labelClock))).start();
+				if(!ClockThread.running) {
+					ClockThread.toStop = false;
+					(new Thread(new ClockThread())).start();
+				}
 			}
 		});
 		mainPanel.add(buttonSimulate);
@@ -397,6 +408,34 @@ public class FroggyApp extends JFrame implements ActionListener{
 		
 		mainPanel.add(menuBar);
 		this.setJMenuBar(menuBar);
+		
+		ClockThread.labelClock = labelClock;
+	}
+	
+/* -----------------------------------------------------------------------------------*/
+	
+	/**
+	 * Metoda do ładowania ustawień konfiguracyjnych
+	 */
+	
+	private void loadConfig() {
+		
+		File file = new File("config/config.txt");
+		
+		try (Scanner scanner = new Scanner(file)) {
+
+			while (scanner.hasNextLine()) {
+				String line = scanner.nextLine();
+				if(line.contains("delay")) {
+					Data.config.put("delay", Integer.parseInt(line.substring(6)));
+				}
+			}
+
+			scanner.close();
+
+		} catch (IOException e) {
+			Data.config.put("delay", 60);
+		}
 	}
 	
 /* -----------------------------------------------------------------------------------*/	

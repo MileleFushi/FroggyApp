@@ -1,6 +1,6 @@
 package data;
 
-public class Category implements CatInterface {
+public class Category {
 	
 	private String name;
 	
@@ -12,8 +12,7 @@ public class Category implements CatInterface {
 		return name;
 	}
 	
-	@Override
-	public double getValueFor(int arg) {
+	public double getValueFor(double arg) {
 		return 0;
 	}
 	

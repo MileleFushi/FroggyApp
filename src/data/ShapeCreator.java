@@ -2,15 +2,15 @@ package data;
 
 public class ShapeCreator {
 	
-	private static double getUp(double point1, double point2, int arg) {		
-		return ((double)arg - point1)/(point2 - point1);
+	private static double getUp(double point1, double point2, double arg) {		
+		return (arg - point1)/(point2 - point1);
 	}
 	
-	private static double getDown(double point1, double point2, int arg) {
-		return (point2 - (double)arg)/(point2 - point1);
+	private static double getDown(double point1, double point2, double arg) {
+		return (point2 - arg)/(point2 - point1);
 	}
 	
-	static double trapeze(boolean fromOne, int arg, int... points) {
+	static double trapeze(boolean fromOne, double arg, int... points) {
 		
 		if(points.length == 2) {
 			if(arg < points[0]) {
