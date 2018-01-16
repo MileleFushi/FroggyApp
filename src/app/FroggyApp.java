@@ -7,6 +7,8 @@ import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -161,6 +163,21 @@ public class FroggyApp extends JFrame implements ActionListener{
 		
 	// TERRA PANEL
 		
+		JLabel labelThermometerImage = new JLabel("");
+		labelThermometerImage.setIcon(new ImageIcon("img/thermometer/ThermometerStateLow.png"));
+		labelThermometerImage.setBounds(89, 280, 95, 68);
+		terraPanel.add(labelThermometerImage);
+		
+		JLabel labelFoggerImage = new JLabel("");
+		labelFoggerImage.setIcon(new ImageIcon("img/fogger/FoggerStateLow.png"));
+		labelFoggerImage.setBounds(194, 280, 81, 68);
+		terraPanel.add(labelFoggerImage);
+		
+		JLabel labelHeatingMatImage = new JLabel("");
+		labelHeatingMatImage.setIcon(new ImageIcon("img/heatingMat/heatingMatStateNull.png"));
+		labelHeatingMatImage.setBounds(285, 280, 100, 68);
+		terraPanel.add(labelHeatingMatImage);
+		
 		JLabel labelLampImage = new JLabel(" ");
 		labelLampImage.setIcon(new ImageIcon("img/lamp/LampState1.png"));
 		labelLampImage.setBounds(-69, -87, 682, 611);
@@ -177,6 +194,38 @@ public class FroggyApp extends JFrame implements ActionListener{
 			public void actionPerformed(ActionEvent e) {
 				ClockThread.toStop = true;		
 			}});
+			buttonPause.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				buttonPause.setBounds(685, 0, 42, 51);
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				buttonPause.setBounds(686, 1, 42, 51);
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 		terraPanel.add(buttonPause);
 		
 		JButton buttonPlay = new JButton();
@@ -195,6 +244,38 @@ public class FroggyApp extends JFrame implements ActionListener{
 				}
 			}
 		});
+		buttonPlay.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				buttonPlay.setBounds(762, 0, 48, 51);
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				buttonPlay.setBounds(763, 1, 48, 51);
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 		terraPanel.add(buttonPlay);
 		
 		JButton buttonForward = new JButton();
@@ -210,6 +291,38 @@ public class FroggyApp extends JFrame implements ActionListener{
 				ClockThread.speedUp = 60;				
 			}
 		});
+		buttonForward.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				buttonForward.setBounds(820, 0, 55, 51);
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				buttonForward.setBounds(821, 1, 55, 51);
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 		terraPanel.add(buttonForward);
 		
 		JButton buttonFastForward = new JButton();
@@ -223,6 +336,38 @@ public class FroggyApp extends JFrame implements ActionListener{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				ClockThread.speedUp = 1000;				
+			}
+		});
+		buttonFastForward.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				buttonFastForward.setBounds(885, 0, 55, 51);
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				buttonFastForward.setBounds(886, 1, 55, 51);
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
 			}
 		});
 		terraPanel.add(buttonFastForward);
@@ -316,7 +461,7 @@ public class FroggyApp extends JFrame implements ActionListener{
 		
 		JButton buttonSimulate = new JButton();
 		
-		buttonSimulate.setIcon(new ImageIcon("img/buttonSymuluj.png"));
+		buttonSimulate.setIcon(new ImageIcon("img/buttonSimulate.png"));
 		buttonSimulate.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
 		buttonSimulate.setContentAreaFilled(false);
 		buttonSimulate.setBounds(371, 160, 284, 102);
@@ -325,6 +470,7 @@ public class FroggyApp extends JFrame implements ActionListener{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				
 				Time.setTimeFromString((String) spinnerSimulatingTime.getValue());
 				
 				ClockThread.speedUp = 1;
@@ -333,6 +479,39 @@ public class FroggyApp extends JFrame implements ActionListener{
 					ClockThread.toStop = false;
 					(new Thread(new ClockThread())).start();
 				}
+			}
+		});
+		
+		buttonSimulate.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				buttonSimulate.setBounds(371, 160, 284, 102);
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				buttonSimulate.setBounds(373, 162, 284, 102);
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
 			}
 		});
 		mainPanel.add(buttonSimulate);
@@ -410,6 +589,7 @@ public class FroggyApp extends JFrame implements ActionListener{
 		this.setJMenuBar(menuBar);
 		
 		ClockThread.labelClock = labelClock;
+		
 	}
 	
 /* -----------------------------------------------------------------------------------*/
