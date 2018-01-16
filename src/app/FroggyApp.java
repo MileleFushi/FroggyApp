@@ -10,7 +10,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -20,11 +19,11 @@ import javax.swing.UIManager;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JSeparator;
 import javax.swing.border.SoftBevelBorder;
 
 import data.Data;
-import data.NoCategoryFoundException;
 
 import javax.swing.border.BevelBorder;
 import java.awt.Color;
@@ -45,11 +44,14 @@ import javax.swing.SpinnerListModel;
 
 
 public class FroggyApp extends JFrame implements ActionListener{
-	
+
+	private static final long serialVersionUID = -1625204278558502659L;
+
 	private JPanel mainPanel, dataInPanel, dataOutPanel, terraPanel;
 	
 	private JTextField textFieldSimulatingTemperatureOut;
 	private JTextField textFieldSimulatingHumidityOut;
+	private boolean simulationStarted = false;
 	
 	
 
@@ -66,12 +68,8 @@ public class FroggyApp extends JFrame implements ActionListener{
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		try {
-			Data.init();
-		} catch (NoCategoryFoundException e) {
-			e.printStackTrace();
-		}
-		
+		Data.init();
+
 		initComponents();
 		loadFont("lib/digital-7.ttf");
 		loadConfig();
@@ -125,15 +123,17 @@ public class FroggyApp extends JFrame implements ActionListener{
 		spinnerSimulatingTime.setBounds(241, 13, 75, 26);
 		dataInPanel.add(spinnerSimulatingTime);
 		
-		JSpinner spinnerTerraTemperature = new JSpinner();
-		spinnerTerraTemperature.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		spinnerTerraTemperature.setBounds(241, 46, 75, 26);
-		dataInPanel.add(spinnerTerraTemperature);
+		JTextField textFieldTerraTemperature = new JTextField();
+		textFieldTerraTemperature.setHorizontalAlignment(JTextField.RIGHT);
+		textFieldTerraTemperature.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		textFieldTerraTemperature.setBounds(241, 46, 75, 26);
+		dataInPanel.add(textFieldTerraTemperature);
 		
-		JSpinner spinnerTerraHumidity = new JSpinner();
-		spinnerTerraHumidity.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		spinnerTerraHumidity.setBounds(241, 82, 75, 26);
-		dataInPanel.add(spinnerTerraHumidity);
+		JTextField textFieldTerraHumidity = new JTextField();
+		textFieldTerraHumidity.setHorizontalAlignment(JTextField.RIGHT);
+		textFieldTerraHumidity.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		textFieldTerraHumidity.setBounds(241, 82, 75, 26);
+		dataInPanel.add(textFieldTerraHumidity);
 		
 		JLabel lblh = new JLabel("[ h ]");
 		lblh.setForeground(new Color(3, 72, 5));
@@ -238,7 +238,7 @@ public class FroggyApp extends JFrame implements ActionListener{
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				
-				if(!ClockThread.running) {
+				if(!ClockThread.running && simulationStarted) {
 					ClockThread.toStop = false;
 					(new Thread(new ClockThread())).start();
 				}
@@ -471,13 +471,40 @@ public class FroggyApp extends JFrame implements ActionListener{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
-				Time.setTimeFromString((String) spinnerSimulatingTime.getValue());
+				double temperature;
+				double humidity;
 				
-				ClockThread.speedUp = 1;
-				
-				if(!ClockThread.running) {
-					ClockThread.toStop = false;
-					(new Thread(new ClockThread())).start();
+				try {
+					temperature = Double.parseDouble(textFieldTerraTemperature.getText());
+					
+					try {
+						humidity = Double.parseDouble(textFieldTerraHumidity.getText());
+						
+						Time.setTimeFromString((String) spinnerSimulatingTime.getValue());
+						
+						ClockThread.speedUp = 1;
+						
+						if(!ClockThread.running) {
+							ClockThread.toStop = false;
+							simulationStarted = true;
+							(new Thread(new ClockThread())).start();
+						}
+						
+						Data.DayTemperature.set(temperature);
+						Data.DayHumidity.set(humidity);
+						Data.NightTemperature.set(temperature);
+						Data.NightHumidity.set(humidity);
+
+						spinnerSimulatingTime.setEnabled(false);
+						textFieldTerraTemperature.setEditable(false);
+						textFieldTerraHumidity.setEditable(false);
+						
+					} catch (NumberFormatException ex) {
+						JOptionPane.showMessageDialog(null, "Złe dane dla wilgotności", "Błąd", JOptionPane.ERROR_MESSAGE);
+					}
+					
+				} catch (NumberFormatException ex) {
+					JOptionPane.showMessageDialog(null, "Złe dane dla temperatury", "Błąd", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
@@ -590,8 +617,8 @@ public class FroggyApp extends JFrame implements ActionListener{
 		
 		ClockThread.labelClock = labelClock;
 		ClockThread.spinnerSimulatingTime = spinnerSimulatingTime;
-		ClockThread.spinnerTerraTemperature = spinnerTerraTemperature;
-		ClockThread.spinnerTerraHumidity = spinnerTerraTemperature;
+		ClockThread.textFieldTerraTemperature = textFieldTerraTemperature;
+		ClockThread.textFieldTerraHumidity = textFieldTerraHumidity;
 		ClockThread.textFieldSimulatingTemperatureOut = textFieldSimulatingTemperatureOut;
 		ClockThread.textFieldSimulatingHumidityOut = textFieldSimulatingHumidityOut;
 	}

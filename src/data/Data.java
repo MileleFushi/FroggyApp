@@ -1,5 +1,7 @@
 package data;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class Data {
@@ -12,9 +14,10 @@ public class Data {
 	public static Term FoggerPower;
 	
 	public static HashMap<String, Object> config;
-	public static HashMap<Category, Category> simpleRules;
+	public static HashMap<Category, Category> inputRules;
+	public static HashMap<ArrayList<Category>, Category> outputRules;
 	
-	public static void init() throws NoCategoryFoundException {
+	public static void init() {
 		
 		DayTemperature = new Term(TermType.DAY_TEMPERATURE);
 		
@@ -160,19 +163,105 @@ public class Data {
 		});		
 		
 		config = new HashMap<>();
-		simpleRules = new HashMap<>();
+		inputRules = new HashMap<>();
+		outputRules = new HashMap<>();
 		
-		simpleRules.put(DayTemperature.getCategory("Za niska"), HeaterPower.getCategory("Duże"));
-		simpleRules.put(DayTemperature.getCategory("Optymalna"), HeaterPower.getCategory("Niewielkie"));
-		simpleRules.put(DayTemperature.getCategory("Za wysoka"), HeaterPower.getCategory("Brak"));
-		simpleRules.put(NightTemperature.getCategory("Za niska"), HeaterPower.getCategory("Duże"));
-		simpleRules.put(NightTemperature.getCategory("Optymalna"), HeaterPower.getCategory("Niewielkie"));
-		simpleRules.put(NightTemperature.getCategory("Za wysoka"), HeaterPower.getCategory("Brak"));
-		simpleRules.put(DayHumidity.getCategory("Za niska"), FoggerPower.getCategory("Duża"));
-		simpleRules.put(DayHumidity.getCategory("Optymalna"), FoggerPower.getCategory("Średnia"));
-		simpleRules.put(DayHumidity.getCategory("Za wysoka"), FoggerPower.getCategory("Mała"));
-		simpleRules.put(NightHumidity.getCategory("Za niska"), FoggerPower.getCategory("Duża"));
-		simpleRules.put(NightHumidity.getCategory("Optymalna"), FoggerPower.getCategory("Średnia"));
-		simpleRules.put(NightHumidity.getCategory("Za wysoka"), FoggerPower.getCategory("Mała"));
+		inputRules.put(DayTemperature.getCategory("Za niska"), HeaterPower.getCategory("Duże"));
+		inputRules.put(DayTemperature.getCategory("Optymalna"), HeaterPower.getCategory("Niewielkie"));
+		inputRules.put(DayTemperature.getCategory("Za wysoka"), HeaterPower.getCategory("Brak"));
+		inputRules.put(NightTemperature.getCategory("Za niska"), HeaterPower.getCategory("Duże"));
+		inputRules.put(NightTemperature.getCategory("Optymalna"), HeaterPower.getCategory("Niewielkie"));
+		inputRules.put(NightTemperature.getCategory("Za wysoka"), HeaterPower.getCategory("Brak"));
+		inputRules.put(DayHumidity.getCategory("Za niska"), FoggerPower.getCategory("Duża"));
+		inputRules.put(DayHumidity.getCategory("Optymalna"), FoggerPower.getCategory("Średnia"));
+		inputRules.put(DayHumidity.getCategory("Za wysoka"), FoggerPower.getCategory("Mała"));
+		inputRules.put(NightHumidity.getCategory("Za niska"), FoggerPower.getCategory("Duża"));
+		inputRules.put(NightHumidity.getCategory("Optymalna"), FoggerPower.getCategory("Średnia"));
+		inputRules.put(NightHumidity.getCategory("Za wysoka"), FoggerPower.getCategory("Mała"));
+		
+		outputRules.put(new ArrayList<Category>(Arrays.asList(DayTemperature.getCategory("Za niska"), 
+				HeaterPower.getCategory("Duże"))), DayTemperature.getCategory("Optymalna"));
+		outputRules.put(new ArrayList<Category>(Arrays.asList(DayTemperature.getCategory("Za niska"), 
+				HeaterPower.getCategory("Niewielkie"))), DayTemperature.getCategory("Optymalna"));
+		outputRules.put(new ArrayList<Category>(Arrays.asList(DayTemperature.getCategory("Za niska"), 
+				HeaterPower.getCategory("Brak"))), DayTemperature.getCategory("Za niska"));
+		
+		outputRules.put(new ArrayList<Category>(Arrays.asList(DayTemperature.getCategory("Optymalna"), 
+				HeaterPower.getCategory("Duże"))), DayTemperature.getCategory("Za wysoka"));
+		outputRules.put(new ArrayList<Category>(Arrays.asList(DayTemperature.getCategory("Optymalna"), 
+				HeaterPower.getCategory("Niewielkie"))), DayTemperature.getCategory("Optymalna"));
+		outputRules.put(new ArrayList<Category>(Arrays.asList(DayTemperature.getCategory("Optymalna"), 
+				HeaterPower.getCategory("Brak"))), DayTemperature.getCategory("Optymalna"));
+		
+		outputRules.put(new ArrayList<Category>(Arrays.asList(DayTemperature.getCategory("Za wysoka"), 
+				HeaterPower.getCategory("Duże"))), DayTemperature.getCategory("Za wysoka"));
+		outputRules.put(new ArrayList<Category>(Arrays.asList(DayTemperature.getCategory("Za wysoka"), 
+				HeaterPower.getCategory("Niewielkie"))), DayTemperature.getCategory("Za wysoka"));
+		outputRules.put(new ArrayList<Category>(Arrays.asList(DayTemperature.getCategory("Za wysoka"), 
+				HeaterPower.getCategory("Brak"))), DayTemperature.getCategory("Optymalna"));
+		
+		outputRules.put(new ArrayList<Category>(Arrays.asList(NightTemperature.getCategory("Za niska"), 
+				HeaterPower.getCategory("Duże"))), NightTemperature.getCategory("Optymalna"));
+		outputRules.put(new ArrayList<Category>(Arrays.asList(NightTemperature.getCategory("Za niska"), 
+				HeaterPower.getCategory("Niewielkie"))), NightTemperature.getCategory("Optymalna"));
+		outputRules.put(new ArrayList<Category>(Arrays.asList(NightTemperature.getCategory("Za niska"), 
+				HeaterPower.getCategory("Brak"))), NightTemperature.getCategory("Za niska"));
+		
+		outputRules.put(new ArrayList<Category>(Arrays.asList(NightTemperature.getCategory("Optymalna"), 
+				HeaterPower.getCategory("Duże"))), NightTemperature.getCategory("Za wysoka"));
+		outputRules.put(new ArrayList<Category>(Arrays.asList(NightTemperature.getCategory("Optymalna"), 
+				HeaterPower.getCategory("Niewielkie"))), NightTemperature.getCategory("Optymalna"));
+		outputRules.put(new ArrayList<Category>(Arrays.asList(NightTemperature.getCategory("Optymalna"), 
+				HeaterPower.getCategory("Brak"))), NightTemperature.getCategory("Optymalna"));
+		
+		outputRules.put(new ArrayList<Category>(Arrays.asList(NightTemperature.getCategory("Za wysoka"), 
+				HeaterPower.getCategory("Duże"))), NightTemperature.getCategory("Za wysoka"));
+		outputRules.put(new ArrayList<Category>(Arrays.asList(NightTemperature.getCategory("Za wysoka"), 
+				HeaterPower.getCategory("Niewielkie"))), NightTemperature.getCategory("Za wysoka"));
+		outputRules.put(new ArrayList<Category>(Arrays.asList(NightTemperature.getCategory("Za wysoka"), 
+				HeaterPower.getCategory("Brak"))), NightTemperature.getCategory("Optymalna"));
+		
+		
+		outputRules.put(new ArrayList<Category>(Arrays.asList(DayHumidity.getCategory("Za niska"), 
+				FoggerPower.getCategory("Duża"))), DayHumidity.getCategory("Optymalna"));
+		outputRules.put(new ArrayList<Category>(Arrays.asList(DayHumidity.getCategory("Za niska"), 
+				FoggerPower.getCategory("Średnia"))), DayHumidity.getCategory("Optymalna"));
+		outputRules.put(new ArrayList<Category>(Arrays.asList(DayHumidity.getCategory("Za niska"), 
+				FoggerPower.getCategory("Mała"))), DayHumidity.getCategory("Za niska"));
+		
+		outputRules.put(new ArrayList<Category>(Arrays.asList(DayHumidity.getCategory("Optymalna"), 
+				FoggerPower.getCategory("Duża"))), DayHumidity.getCategory("Za wysoka"));
+		outputRules.put(new ArrayList<Category>(Arrays.asList(DayHumidity.getCategory("Optymalna"), 
+				FoggerPower.getCategory("Średnia"))), DayHumidity.getCategory("Optymalna"));
+		outputRules.put(new ArrayList<Category>(Arrays.asList(DayHumidity.getCategory("Optymalna"), 
+				FoggerPower.getCategory("Mała"))), DayHumidity.getCategory("Optymalna"));
+		
+		outputRules.put(new ArrayList<Category>(Arrays.asList(DayHumidity.getCategory("Za wysoka"), 
+				FoggerPower.getCategory("Duża"))), DayHumidity.getCategory("Za wysoka"));
+		outputRules.put(new ArrayList<Category>(Arrays.asList(DayHumidity.getCategory("Za wysoka"), 
+				FoggerPower.getCategory("Średnia"))), DayHumidity.getCategory("Za wysoka"));
+		outputRules.put(new ArrayList<Category>(Arrays.asList(DayHumidity.getCategory("Za wysoka"), 
+				FoggerPower.getCategory("Mała"))), DayHumidity.getCategory("Optymalna"));
+		
+		outputRules.put(new ArrayList<Category>(Arrays.asList(NightHumidity.getCategory("Za niska"), 
+				FoggerPower.getCategory("Duża"))), NightHumidity.getCategory("Optymalna"));
+		outputRules.put(new ArrayList<Category>(Arrays.asList(NightHumidity.getCategory("Za niska"), 
+				FoggerPower.getCategory("Średnia"))), NightHumidity.getCategory("Optymalna"));
+		outputRules.put(new ArrayList<Category>(Arrays.asList(NightHumidity.getCategory("Za niska"), 
+				FoggerPower.getCategory("Mała"))), NightHumidity.getCategory("Za niska"));
+		
+		outputRules.put(new ArrayList<Category>(Arrays.asList(NightHumidity.getCategory("Optymalna"), 
+				FoggerPower.getCategory("Duża"))), NightHumidity.getCategory("Za wysoka"));
+		outputRules.put(new ArrayList<Category>(Arrays.asList(NightHumidity.getCategory("Optymalna"), 
+				FoggerPower.getCategory("Średnia"))), NightHumidity.getCategory("Optymalna"));
+		outputRules.put(new ArrayList<Category>(Arrays.asList(NightHumidity.getCategory("Optymalna"), 
+				FoggerPower.getCategory("Mała"))), NightHumidity.getCategory("Optymalna"));
+		
+		outputRules.put(new ArrayList<Category>(Arrays.asList(NightHumidity.getCategory("Za wysoka"), 
+				FoggerPower.getCategory("Duża"))), NightHumidity.getCategory("Za wysoka"));
+		outputRules.put(new ArrayList<Category>(Arrays.asList(NightHumidity.getCategory("Za wysoka"), 
+				FoggerPower.getCategory("Średnia"))), NightHumidity.getCategory("Za wysoka"));
+		outputRules.put(new ArrayList<Category>(Arrays.asList(NightHumidity.getCategory("Za wysoka"), 
+				FoggerPower.getCategory("Mała"))), NightHumidity.getCategory("Optymalna"));
 	}	
 }

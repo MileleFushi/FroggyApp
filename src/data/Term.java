@@ -12,7 +12,8 @@ public class Term {
 		this.type = type;
 	}
 	
-	void set(double value) {
+	public void set(double value) {
+		System.out.println(type + " value has changed to " + value);
 		this.value = value;
 	}
 	
@@ -34,14 +35,14 @@ public class Term {
 		return value;
 	}
 	
-	public Category getCategory(String name) throws NoCategoryFoundException {
+	public Category getCategory(String name) {
 		
 		for(Category cat : categories) {
 			if(cat.getName().equals(name))
 				return cat;
 		}
 		
-		throw new NoCategoryFoundException(name);
+		return null;
 	}	
 	
 	public ArrayList<Category> getCategories() {		

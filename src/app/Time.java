@@ -81,4 +81,8 @@ public class Time {
 		
 	}
 	
+	public static boolean isDay() {
+		return (hour < 22 && hour > 6);
+	}
+	
 }
