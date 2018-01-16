@@ -9,9 +9,9 @@ public class DataSensitizer {
 	static int left;
 	static int right;
 	
-	static void setUp(Term term, int value) throws NoCategoryFoundException {
+	static void setUp(Term term) throws NoCategoryFoundException {
 		
-		RulesApplier.setUp(term, value);
+		RulesApplier.setUp(term);
 		categories = RulesApplier.categories;
 		categoryMaximums = RulesApplier.categoryMaximums;
 		left = RulesApplier.left;
@@ -51,7 +51,7 @@ public class DataSensitizer {
 		
 		for(int i = left; i <= right; i++ ) {
 			numerator +=  (double) i * getValueFor(i);
-			System.out.println("i=" +i + " y=" + getValueFor(i));
+			System.out.println("i=" +i + " y=" + getValueFor(i)); // TODO remove
 			denominator += getValueFor(i);
 		}
 		
@@ -61,9 +61,9 @@ public class DataSensitizer {
 	public static void main(String[] args) throws NoCategoryFoundException {
 		
 		Data.init();
-		int value = 22;
-		Data.simpleRules.get(Data.DayTemperature.getCategory("Za niska"));
-		DataSensitizer.setUp(Data.DayTemperature, value);
+		int value = -10;
+		Data.DayTemperature.set(value);
+		DataSensitizer.setUp(Data.DayTemperature);
 		System.out.println("wynik: " + DataSensitizer.getResult());
 	}
 }

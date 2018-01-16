@@ -110,11 +110,11 @@ public class FroggyApp extends JFrame implements ActionListener{
 		labelTerraTemperature.setBounds(10, 44, 194, 29);
 		dataInPanel.add(labelTerraTemperature);
 		
-		JLabel lalbelTerraHumidity = new JLabel("Wilgotność w terrarium:");
-		lalbelTerraHumidity.setForeground(new Color(3, 72, 5));
-		lalbelTerraHumidity.setFont(new Font("Franklin Gothic Book", Font.PLAIN, 17));
-		lalbelTerraHumidity.setBounds(10, 80, 194, 29);
-		dataInPanel.add(lalbelTerraHumidity);
+		JLabel labelTerraHumidity = new JLabel("Wilgotność w terrarium:");
+		labelTerraHumidity.setForeground(new Color(3, 72, 5));
+		labelTerraHumidity.setFont(new Font("Franklin Gothic Book", Font.PLAIN, 17));
+		labelTerraHumidity.setBounds(10, 80, 194, 29);
+		dataInPanel.add(labelTerraHumidity);
 		
 		JSpinner spinnerSimulatingTime = new JSpinner();
 		spinnerSimulatingTime.setModel(new SpinnerListModel(HoursList.get()));
@@ -410,6 +410,11 @@ public class FroggyApp extends JFrame implements ActionListener{
 		this.setJMenuBar(menuBar);
 		
 		ClockThread.labelClock = labelClock;
+		ClockThread.spinnerSimulatingTime = spinnerSimulatingTime;
+		ClockThread.spinnerTerraTemperature = spinnerTerraTemperature;
+		ClockThread.spinnerTerraHumidity = spinnerTerraTemperature;
+		ClockThread.textFieldSimulatingTemperatureOut = textFieldSimulatingTemperatureOut;
+		ClockThread.textFieldSimulatingHumidityOut = textFieldSimulatingHumidityOut;
 	}
 	
 /* -----------------------------------------------------------------------------------*/

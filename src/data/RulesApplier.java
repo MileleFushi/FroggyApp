@@ -13,15 +13,15 @@ public class RulesApplier {
 	static int left;
 	static int right;
 	
-	static void setUp(Term term, int value) throws NoCategoryFoundException {
+	static void setUp(Term term) throws NoCategoryFoundException {
 		
 		categories = new ArrayList<Category>();
 		categoryMaximums = new ArrayList<Double>();
 		
 		for(Category key : term.getCategories()) {
-			if(key.getValueFor(value) > 0) {
+			if(key.getValueFor(term.get()) > 0) {
 				categories.add(Data.simpleRules.get(key));
-				categoryMaximums.add(key.getValueFor(value));
+				categoryMaximums.add(key.getValueFor(term.get()));
 			}
 		}
 		

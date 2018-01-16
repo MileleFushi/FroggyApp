@@ -6,9 +6,14 @@ public class Term {
 	
 	private ArrayList<Category> categories;
 	private TermType type;
+	private double value;
 	
 	Term(TermType type) {
 		this.type = type;
+	}
+	
+	void set(double value) {
+		this.value = value;
 	}
 	
 	void addCategory(Category category) {
@@ -23,6 +28,10 @@ public class Term {
 	
 	public TermType getType() {
 		return type;
+	}
+	
+	public double get() {
+		return value;
 	}
 	
 	public Category getCategory(String name) throws NoCategoryFoundException {
