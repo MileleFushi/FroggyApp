@@ -1,1 +1,2 @@
 delay=10
+backgroundChangeSpeed=50

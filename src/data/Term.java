@@ -13,7 +13,7 @@ public class Term {
 	}
 	
 	public void set(double value) {
-		System.out.println(type + " value has changed to " + value);
+		//System.out.println(type + " value has changed to " + value);
 		this.value = value;
 	}
 	

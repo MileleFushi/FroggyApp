@@ -614,13 +614,19 @@ public class FroggyApp extends JFrame implements ActionListener{
 		
 		mainPanel.add(menuBar);
 		this.setJMenuBar(menuBar);
-		
-		ClockThread.labelClock = labelClock;
-		ClockThread.spinnerSimulatingTime = spinnerSimulatingTime;
+			
 		ClockThread.textFieldTerraTemperature = textFieldTerraTemperature;
 		ClockThread.textFieldTerraHumidity = textFieldTerraHumidity;
 		ClockThread.textFieldSimulatingTemperatureOut = textFieldSimulatingTemperatureOut;
 		ClockThread.textFieldSimulatingHumidityOut = textFieldSimulatingHumidityOut;
+		
+		ClockThread.labelClock = labelClock;
+		ClockThread.labelClockImage = labelClockImage;
+		ClockThread.labelThermometerImage = labelThermometerImage;		
+		ClockThread.labelFoggerImage = labelFoggerImage;		
+		ClockThread.labelHeatingMatImage = labelHeatingMatImage;		
+		ClockThread.labelLampImage = labelLampImage;
+		ClockThread.terraPanel = terraPanel;
 	}
 	
 /* -----------------------------------------------------------------------------------*/
@@ -639,13 +645,16 @@ public class FroggyApp extends JFrame implements ActionListener{
 				String line = scanner.nextLine();
 				if(line.contains("delay")) {
 					Data.config.put("delay", Integer.parseInt(line.substring(6)));
+				} else if (line.contains("backgroundChangeSpeed")) {
+					Data.config.put("backgroundChangeSpeed", Integer.parseInt(line.substring(22)));
 				}
 			}
 
 			scanner.close();
 
-		} catch (IOException e) {
+		} catch (IOException | NumberFormatException e) {
 			Data.config.put("delay", 60);
+			Data.config.put("backgroundChangeSpeed", 30);
 		}
 	}
 	
