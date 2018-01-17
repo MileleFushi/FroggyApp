@@ -4,16 +4,16 @@ import java.util.ArrayList;
 
 public class DataSensitizer {
 	
-	static ArrayList<Category> categories;
-	static ArrayList<Double> categoryMaximums;
+	static ArrayList<Term> terms;
+	static ArrayList<Double> termsMaximums;
 	static int left;
 	static int right;
 	
-	public static void setUp(Term... terms) {
+	public static void setUp(LingVariable... lingVars) {
 		
-		RulesApplier.setUp(terms);
-		categories = RulesApplier.categories;
-		categoryMaximums = RulesApplier.categoryMaximums;
+		RulesApplier.setUp(lingVars);
+		terms = RulesApplier.terms;
+		termsMaximums = RulesApplier.termsMaximums;
 		left = RulesApplier.left;
 		right = RulesApplier.right;
 		
@@ -21,26 +21,26 @@ public class DataSensitizer {
 	
 	static double getValueFor(int arg) {
 		
-		if(categories.size() > 1)
+		if(terms.size() > 1)
 		{
-			if(categories.get(0).getValueFor(arg) > categories.get(1).getValueFor(arg)) {
-				if(categories.get(0).getValueFor(arg) > categoryMaximums.get(0))
-					return categoryMaximums.get(0);
+			if(terms.get(0).getValueFor(arg) > terms.get(1).getValueFor(arg)) {
+				if(terms.get(0).getValueFor(arg) > termsMaximums.get(0))
+					return termsMaximums.get(0);
 				else 
-					return categories.get(0).getValueFor(arg);
+					return terms.get(0).getValueFor(arg);
 			}
 			else {
-				if(categories.get(1).getValueFor(arg) > categoryMaximums.get(1))
-					return categoryMaximums.get(1);
+				if(terms.get(1).getValueFor(arg) > termsMaximums.get(1))
+					return termsMaximums.get(1);
 				else 
-					return categories.get(1).getValueFor(arg);
+					return terms.get(1).getValueFor(arg);
 			}				
 		}
 		else {
-			if(categories.get(0).getValueFor(arg) > categoryMaximums.get(0))
-				return categoryMaximums.get(0);
+			if(terms.get(0).getValueFor(arg) > termsMaximums.get(0))
+				return termsMaximums.get(0);
 			else 
-				return categories.get(0).getValueFor(arg);
+				return terms.get(0).getValueFor(arg);
 		}
 	}
 	
@@ -51,20 +51,9 @@ public class DataSensitizer {
 		
 		for(int i = left; i <= right; i++ ) {
 			numerator +=  (double) i * getValueFor(i);
-			//System.out.println("i=" +i + " y=" + getValueFor(i)); // TODO remove
 			denominator += getValueFor(i);
 		}
 		
 		return numerator/denominator;	
 	}	
-	
-	public static void main(String[] args) {
-		
-		Data.init();
-		int value = 40;
-		Data.DayTemperature.set(value);
-		Data.HeaterPower.set(30);
-		DataSensitizer.setUp(Data.DayTemperature, Data.HeaterPower);
-		System.out.println("wynik: " + DataSensitizer.getResult());
-	}
 }
