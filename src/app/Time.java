@@ -44,6 +44,18 @@ public class Time {
 		return time;		
 	}
 	
+	public static String getTimeWithSeconds() {
+		
+		String time = getTime() + ":";
+		
+		if(second < 10)
+			time += "0";
+
+		time += second + ":";
+		
+		return time;		
+	}
+	
 	public static void setTime(int h, int m, int s) {
 		hour = h;
 		minute = m;

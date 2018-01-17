@@ -2,6 +2,8 @@ package data;
 
 import java.util.ArrayList;
 
+import logger.Log;
+
 public class Term {
 	
 	private ArrayList<Category> categories;
@@ -13,7 +15,7 @@ public class Term {
 	}
 	
 	public void set(double value) {
-		//System.out.println(type + " value has changed to " + value);
+		Log.debug(type + " - wartość zmieniono na " + value);
 		this.value = value;
 	}
 	

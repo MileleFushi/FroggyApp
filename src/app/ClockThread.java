@@ -136,7 +136,6 @@ public class ClockThread implements Runnable {
     	
     	int red, green, blue;
     	int backgroundChangeSpeed = (int) Data.config.get("backgroundChangeSpeed");
-    	System.out.println("back: " + backgroundChangeSpeed);
     	
 		if(terraPanel.getBackground() != to) {
 			try {
