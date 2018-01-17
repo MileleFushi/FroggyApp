@@ -195,7 +195,7 @@ public class ClockThread implements Runnable {
 
     	if(Data.DayTemperature.get() > 33) {
     		labelThermometerImage.setIcon(new ImageIcon("img/thermometer/ThermometerStateHigh.png"));
-    	} else if (Data.DayTemperature.get() > 22) {
+    	} else if (Data.DayTemperature.get() > 20) {
     		labelThermometerImage.setIcon(new ImageIcon("img/thermometer/ThermometerStateMedium.png"));
     	} else {
     		labelThermometerImage.setIcon(new ImageIcon("img/thermometer/ThermometerStateLow.png"));

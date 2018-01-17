@@ -163,25 +163,45 @@ public class FroggyApp extends JFrame implements ActionListener{
 		
 	// TERRA PANEL
 		
-		JLabel labelThermometerImage = new JLabel("");
-		labelThermometerImage.setIcon(new ImageIcon("img/thermometer/ThermometerStateLow.png"));
-		labelThermometerImage.setBounds(89, 280, 95, 68);
-		terraPanel.add(labelThermometerImage);
-		
-		JLabel labelFoggerImage = new JLabel("");
-		labelFoggerImage.setIcon(new ImageIcon("img/fogger/FoggerStateLow.png"));
-		labelFoggerImage.setBounds(194, 280, 81, 68);
-		terraPanel.add(labelFoggerImage);
-		
-		JLabel labelHeatingMatImage = new JLabel("");
-		labelHeatingMatImage.setIcon(new ImageIcon("img/heatingMat/heatingMatStateNull.png"));
-		labelHeatingMatImage.setBounds(285, 280, 100, 68);
-		terraPanel.add(labelHeatingMatImage);
+		JLabel labelClock = new JLabel(Time.getTime());
+		labelClock.setFont(new Font("digital-7", Font.BOLD, 34));
+		labelClock.setBounds(762, 280, 100, 60);
+		terraPanel.add(labelClock);
 		
 		JLabel labelLampImage = new JLabel(" ");
 		labelLampImage.setIcon(new ImageIcon("img/lamp/LampState1.png"));
-		labelLampImage.setBounds(-69, -87, 682, 611);
+		labelLampImage.setBounds(-102, -16, 472, 468);
 		terraPanel.add(labelLampImage);
+		
+		JLabel labelClockImage = new JLabel(" ");
+		labelClockImage.setIcon(new ImageIcon("img/clock/clockDay.png"));
+		labelClockImage.setBounds(726, 249, 214, 133);
+		terraPanel.add(labelClockImage);
+		
+		JLabel labelHeatingMatImage = new JLabel("");
+		labelHeatingMatImage.setIcon(new ImageIcon("img/heatingMat/HeatingMatStateNull.png"));
+		labelHeatingMatImage.setBounds(-59, 125, 963, 265);
+		terraPanel.add(labelHeatingMatImage);
+		
+		JLabel labelThermometerImage = new JLabel("");
+		labelThermometerImage.setIcon(new ImageIcon("img/thermometer/ThermometerStateLow.png"));
+		labelThermometerImage.setBounds(688, 111, 111, 108);
+		terraPanel.add(labelThermometerImage);
+		
+		JLabel labelTerrariumimage = new JLabel("");
+		labelTerrariumimage.setIcon(new ImageIcon("img/terrarium/Terrarium.png"));
+		labelTerrariumimage.setBounds(21, 62, 888, 286);
+		terraPanel.add(labelTerrariumimage);
+		
+		JLabel labelFoggerImage = new JLabel("");
+		labelFoggerImage.setIcon(new ImageIcon("img/fogger/FoggerStateLow.png"));
+		labelFoggerImage.setBounds(142, 96, 874, 286);
+		terraPanel.add(labelFoggerImage);
+		
+		JLabel labelDeskImage = new JLabel("");
+		labelDeskImage.setIcon(new ImageIcon("img/terrarium/Desk.png"));
+		labelDeskImage.setBounds(0, 282, 950, 90);
+		terraPanel.add(labelDeskImage);
 		
 		JButton buttonPause = new JButton();
 		buttonPause.setIcon(new ImageIcon("img/navigation/pause.png"));
@@ -371,16 +391,6 @@ public class FroggyApp extends JFrame implements ActionListener{
 			}
 		});
 		terraPanel.add(buttonFastForward);
-		
-		JLabel labelClock = new JLabel(Time.getTime());
-		labelClock.setFont(new Font("digital-7", Font.BOLD, 34));
-		labelClock.setBounds(765, 270, 100, 60);
-		terraPanel.add(labelClock);
-		
-		JLabel labelClockImage = new JLabel(" ");
-		labelClockImage.setIcon(new ImageIcon("img/clock/clockDay.png"));
-		labelClockImage.setBounds(723, 231, 217, 141);
-		terraPanel.add(labelClockImage);
 		
 	// DATA OUT PANEL
 		
@@ -627,6 +637,10 @@ public class FroggyApp extends JFrame implements ActionListener{
 		ClockThread.labelHeatingMatImage = labelHeatingMatImage;		
 		ClockThread.labelLampImage = labelLampImage;
 		ClockThread.terraPanel = terraPanel;
+		
+		
+		
+		
 	}
 	
 /* -----------------------------------------------------------------------------------*/
