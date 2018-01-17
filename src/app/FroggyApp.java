@@ -197,15 +197,17 @@ public class FroggyApp extends JFrame implements ActionListener{
 		
 		
 		
-		JLabel labelFrogImage = new JLabel("");
-		labelFrogImage.setIcon(new ImageIcon("img/frog0.png"));
-		labelFrogImage.setBounds(180, 130, 874, 286);
-		terraPanel.add(labelFrogImage);
+		
 		
 		JLabel labelFoggerImage = new JLabel("");
 		labelFoggerImage.setIcon(new ImageIcon("img/fogger/FoggerStateLow.png"));
 		labelFoggerImage.setBounds(142, 96, 874, 286);
 		terraPanel.add(labelFoggerImage);
+		
+		JLabel labelFrogImage = new JLabel("");
+		labelFrogImage.setIcon(new ImageIcon("img/frog0.png"));
+		labelFrogImage.setBounds(180, 130, 874, 286);
+		terraPanel.add(labelFrogImage);
 		
 		JLabel labelGrassImage = new JLabel("");
 		labelGrassImage.setIcon(new ImageIcon("img/grass1.png"));
