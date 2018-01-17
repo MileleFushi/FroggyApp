@@ -195,6 +195,8 @@ public class FroggyApp extends JFrame implements ActionListener{
 		labelTerrariumimage.setBounds(21, 62, 888, 286);
 		terraPanel.add(labelTerrariumimage);
 		
+		
+		
 		JLabel labelFrogImage = new JLabel("");
 		labelFrogImage.setIcon(new ImageIcon("img/frog0.png"));
 		labelFrogImage.setBounds(180, 130, 874, 286);
@@ -204,6 +206,11 @@ public class FroggyApp extends JFrame implements ActionListener{
 		labelFoggerImage.setIcon(new ImageIcon("img/fogger/FoggerStateLow.png"));
 		labelFoggerImage.setBounds(142, 96, 874, 286);
 		terraPanel.add(labelFoggerImage);
+		
+		JLabel labelGrassImage = new JLabel("");
+		labelGrassImage.setIcon(new ImageIcon("img/grass1.png"));
+		labelGrassImage.setBounds(80, 100, 874, 286);
+		terraPanel.add(labelGrassImage);
 		
 		JLabel labelDeskImage = new JLabel("");
 		labelDeskImage.setIcon(new ImageIcon("img/terrarium/Desk.png"));
@@ -651,6 +658,7 @@ public class FroggyApp extends JFrame implements ActionListener{
 		ClockThread.labelLampImage = labelLampImage;
 		ClockThread.terraPanel = terraPanel;
 		ClockThread.labelFrogImage = labelFrogImage;
+		ClockThread.labelGrassImage = labelGrassImage;
 		
 		
 		

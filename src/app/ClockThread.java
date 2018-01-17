@@ -29,6 +29,7 @@ public class ClockThread implements Runnable {
 	public static JLabel labelHeatingMatImage;		
 	public static JLabel labelLampImage;
 	public static JLabel labelFrogImage;
+	public static JLabel labelGrassImage;
 	
 	public static JPanel terraPanel;
 	
