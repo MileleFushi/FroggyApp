@@ -1,4 +1,4 @@
-delay=10
+delay=100
 backgroundChangeSpeed=50
 log=warn
 logSimulatedTime=true

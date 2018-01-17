@@ -17,6 +17,7 @@ public class ClockThread implements Runnable {
 	public static boolean running = false;
 	private static int delay;
 	private static int i;
+	private static int f;
 	
 	private static double temperatureToAdd;
 	private static double humidityToAdd;
@@ -44,6 +45,7 @@ public class ClockThread implements Runnable {
     	
     		delay = (int)Data.config.get("delay");
     		i = delay;
+    		f = 0;
     		presetBackground();
     	
     		while(true) {
@@ -51,6 +53,7 @@ public class ClockThread implements Runnable {
     			if(toStop) {
     				running = false;
     				i = delay;
+    				f = 0;
     				break;
     			}
     			
@@ -64,6 +67,13 @@ public class ClockThread implements Runnable {
     			}
         	    
     			setOutputs();
+    			
+    			if( f == 0) {
+    				f = 1;
+    				breathe();
+    			} else {
+    				f = 0;
+    			}
     			
     			if( i != delay) {
     				i++;
@@ -215,5 +225,9 @@ public class ClockThread implements Runnable {
     	} else {
     		labelHeatingMatImage.setIcon(new ImageIcon("img/heatingMat/HeatingMatStateNull.png"));
     	}  	
+    }
+    
+    private static void breathe() {
+    	
     }
 }
