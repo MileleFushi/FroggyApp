@@ -28,6 +28,7 @@ public class ClockThread implements Runnable {
 	public static JLabel labelFoggerImage;		
 	public static JLabel labelHeatingMatImage;		
 	public static JLabel labelLampImage;
+	public static JLabel labelFrogImage;
 	
 	public static JPanel terraPanel;
 	
@@ -67,10 +68,10 @@ public class ClockThread implements Runnable {
     			}
         	    
     			setOutputs();
+    			breathe();
     			
     			if( f == 0) {
     				f = 1;
-    				breathe();
     			} else {
     				f = 0;
     			}
@@ -229,5 +230,7 @@ public class ClockThread implements Runnable {
     
     private static void breathe() {
     	
+    	
+    	labelFrogImage.setIcon(new ImageIcon("img/frog" + f + ".png"));
     }
 }
