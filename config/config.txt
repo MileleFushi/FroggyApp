@@ -1,2 +1,4 @@
 delay=10
 backgroundChangeSpeed=50
+log=warn
+logSimulatedTime=true

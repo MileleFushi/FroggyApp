@@ -5,8 +5,8 @@ import java.util.Arrays;
 
 public class RulesApplier {
 	
-	static ArrayList<Category> categories;
-	static ArrayList<Double> categoryMaximums;
+	static ArrayList<Term> terms;
+	static ArrayList<Double> termsMaximums;
 	
 	final static int MINIMAL_HEATER_POWER = 15;
 	final static int MAXIMAL_HEATER_POWER = 36;
@@ -20,21 +20,21 @@ public class RulesApplier {
 	static int left;
 	static int right;
 	
-	static void setUp(Term... terms) {
+	static void setUp(LingVariable... lingVars) {
 		
-		categories = new ArrayList<Category>();
-		categoryMaximums = new ArrayList<Double>();
+		terms = new ArrayList<Term>();
+		termsMaximums = new ArrayList<Double>();
 		
-		if(terms.length == 1) {
+		if(lingVars.length == 1) {
 			
-			for(Category key : terms[0].getCategories()) {
-				if(key.getValueFor(terms[0].get()) > 0) {
-					categories.add(Data.inputRules.get(key));
-					categoryMaximums.add(key.getValueFor(terms[0].get()));
+			for(Term key : lingVars[0].getTerms()) {
+				if(key.getValueFor(lingVars[0].get()) > 0) {
+					terms.add(Data.inputRules.get(key));
+					termsMaximums.add(key.getValueFor(lingVars[0].get()));
 				}
 			}
 			
-			if(terms[0].getType() == TermType.DAY_TEMPERATURE || terms[0].getType() == TermType.NIGHT_TEMPERATURE) {
+			if(lingVars[0].getType() == LingVarType.DAY_TEMPERATURE || lingVars[0].getType() == LingVarType.NIGHT_TEMPERATURE) {
 
 				left = MINIMAL_HEATER_POWER;
 				right = MAXIMAL_HEATER_POWER;	
@@ -52,21 +52,21 @@ public class RulesApplier {
 			for(int i = 0; i < 3; i++) {
 				for(int j = 0; j < 3; j++) {
 				
-					Category first = terms[0].getCategories().get(i);
-					Category second = terms[1].getCategories().get(j);
+					Term first = lingVars[0].getTerms().get(i);
+					Term second = lingVars[1].getTerms().get(j);
 					double value;
 					
-					if(first.getValueFor(terms[0].get()) > 0 && second.getValueFor(terms[1].get()) > 0) {
-						categories.add(Data.outputRules.get(Arrays.asList(first, second)));
-						value = first.getValueFor(terms[0].get()) < second.getValueFor(terms[1].get()) 
-								? first.getValueFor(terms[0].get()) : second.getValueFor(terms[1].get());
-						categoryMaximums.add(value);
+					if(first.getValueFor(lingVars[0].get()) > 0 && second.getValueFor(lingVars[1].get()) > 0) {
+						terms.add(Data.outputRules.get(Arrays.asList(first, second)));
+						value = first.getValueFor(lingVars[0].get()) < second.getValueFor(lingVars[1].get()) 
+								? first.getValueFor(lingVars[0].get()) : second.getValueFor(lingVars[1].get());
+						termsMaximums.add(value);
 					}
 					
 				}
 			}
 			
-			if(terms[0].getType() == TermType.DAY_TEMPERATURE || terms[0].getType() == TermType.NIGHT_TEMPERATURE) {
+			if(lingVars[0].getType() == LingVarType.DAY_TEMPERATURE || lingVars[0].getType() == LingVarType.NIGHT_TEMPERATURE) {
 
 				left = MINIMAL_TEMPERATURE;
 				right = MAXIMAL_TEMPERATURE;	

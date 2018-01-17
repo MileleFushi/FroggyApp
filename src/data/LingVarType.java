@@ -1,6 +1,6 @@
 package data;
 
-public enum TermType {
+public enum LingVarType {
 	
 	DAY_TEMPERATURE, 
 	NIGHT_TEMPERATURE, 

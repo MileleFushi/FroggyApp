@@ -24,6 +24,8 @@ import javax.swing.JSeparator;
 import javax.swing.border.SoftBevelBorder;
 
 import data.Data;
+import logger.Log;
+import logger.LoggingType;
 
 import javax.swing.border.BevelBorder;
 import java.awt.Color;
@@ -308,7 +310,8 @@ public class FroggyApp extends JFrame implements ActionListener{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ClockThread.speedUp = 60;				
+				ClockThread.speedUp = 60;		
+				Log.debug("Przyspieszenie: tryb minutowy");
 			}
 		});
 		buttonForward.addMouseListener(new MouseListener() {
@@ -355,7 +358,8 @@ public class FroggyApp extends JFrame implements ActionListener{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ClockThread.speedUp = 1000;				
+				ClockThread.speedUp = 1000;			
+				Log.debug("Przyspieszenie: tryb godzinny");
 			}
 		});
 		buttonFastForward.addMouseListener(new MouseListener() {
@@ -509,11 +513,15 @@ public class FroggyApp extends JFrame implements ActionListener{
 						textFieldTerraTemperature.setEditable(false);
 						textFieldTerraHumidity.setEditable(false);
 						
+						Log.info("Symulacja rozpoczęta");
+						
 					} catch (NumberFormatException ex) {
+						Log.error("Wilgotność nie może przyjąć podanej wartości " + textFieldTerraHumidity.getText());
 						JOptionPane.showMessageDialog(null, "Złe dane dla wilgotności", "Błąd", JOptionPane.ERROR_MESSAGE);
 					}
 					
 				} catch (NumberFormatException ex) {
+					Log.error("Temperatura nie może przyjąć podanej wartości " + textFieldTerraTemperature.getText());
 					JOptionPane.showMessageDialog(null, "Złe dane dla temperatury", "Błąd", JOptionPane.ERROR_MESSAGE);
 				}
 			}
@@ -657,18 +665,42 @@ public class FroggyApp extends JFrame implements ActionListener{
 
 			while (scanner.hasNextLine()) {
 				String line = scanner.nextLine();
-				if(line.contains("delay")) {
+				
+				if(line.contains("delay=")) {
 					Data.config.put("delay", Integer.parseInt(line.substring(6)));
-				} else if (line.contains("backgroundChangeSpeed")) {
+					
+				} else if (line.contains("backgroundChangeSpeed=")) {
 					Data.config.put("backgroundChangeSpeed", Integer.parseInt(line.substring(22)));
+					
+					
+				} else if (line.contains("logSimulatedTime=")) {
+					Data.config.put("logSimulatedTime", Boolean.parseBoolean(line.substring(17)));
+					
+				} else if (line.contains("log=")) {
+					
+					String loggingType = line.substring(4);
+					
+					if(loggingType.equalsIgnoreCase("debug"))
+						Log.shown = LoggingType.DEBUG;
+					else if(loggingType.equalsIgnoreCase("info")) 
+						Log.shown = LoggingType.INFO;
+					else if(loggingType.equalsIgnoreCase("warn"))
+						Log.shown = LoggingType.WARN;
+					else if(loggingType.equalsIgnoreCase("error"))
+						Log.shown = LoggingType.ERROR;
+					else
+						Log.shown = LoggingType.INFO;
 				}
 			}
 
 			scanner.close();
 
 		} catch (IOException | NumberFormatException e) {
+			Log.warn("Ustawienia konfiguracyjne są błędne. Ustawiono wartości domyślne.");
 			Data.config.put("delay", 60);
 			Data.config.put("backgroundChangeSpeed", 30);
+			Log.shown = LoggingType.INFO;
+			Data.config.put("logSimulatedTime", true);
 		}
 	}
 	
